@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Clothestest</title>
+   
+  
+    
+</head>
+
+<body  >
+    
+    <form action="/" method="post"  ALIGN=center > 
+    <h1 >WebTest{{ctxt}}</h1>
+
+    <!-- <img src= "{{images01}}" width="300" heigh="200" id="images01">
+    <img src= "{{images02}}" width="300" heigh="200" id="images02">
+    <img src= "{{images03}}" width="300" heigh="200" id="images03">  -->
+
+    </form>
+
+    <div class="flexslider" data-cycle="3000"  > 
+        <ul class="slides">
+          <li>
+            <img src="{{images01}}" id="images01" />
+          </li>
+          <li>
+            <img src="{{images02}}" id="images02"/>
+          </li>
+          <li>
+            <img src="{{images03}}" id="images03"/>
+          </li>
+          <li>
+            <img src="{{images04}}" id="images04"/>
+          </li>
+          <li>
+            <img src="{{images05}}" id="images05"/>
+          </li>
+          <li>
+            <img src="{{images06}}" id="images06"/>
+          </li>
+          <li>
+            <img src="{{images07}}" id="images07"/>
+          </li>
+          <li>
+            <img src="{{images08}}" id="images08"/>
+          </li>
+          <li>
+            <img src="{{images09}}" id="images09"/>
+          </li>
+        </ul>
+    </div>  
+    
+    
+    <form ALIGN=center >
+    <button  >Change</button>
+    </form>
+    <form ALIGN=center method="post" >
+    <video autoplay="autoplay" playsinline id="webcam" width="960px" height="640px" ALIGN=center muted ></video> 
+    </form>
+
+    <canvas id="canvas_1" style="display: none"></canvas>
+
+    <h7 id= "test"  style="display: none">123</h7>
+
+
+    <button onclick="camaeraImg()" style="display: none"></button>
+    <!-- <button onclick="downLoadImage()"style="display: none"></button> -->
+    <button onclick="ImgChange()"style="display: none"></button>
+
+
+</body>
+
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/flexslider.css')}}">
+<!-- <link rel="stylesheet" href="C:/Users/jack3/Desktop/DataSave/FlexSlider/flexslider.css" type="text/css"> -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="C:/Users/jack3/Desktop/DataSave/FlexSlider/jquery.flexslider.js"></script> -->
+<script src="../static/js/jquery.flexslider.js"></script>
+
+<script language="JavaScript">
+
+    window.onload = function () {
+                var constraints = { audio: false, video: { width: 1280, height: 720} }; 
+    navigator.mediaDevices.getUserMedia(constraints)
+    .then(function(mediaStream) {
+    var video = document.querySelector('video');
+    var canvas = document.getElementById('canvas_1');
+    var image1 = document.getElementById('images01');
+    var image2 = document.getElementById('images02');
+    var image3 = document.getElementById('images03');
+    var image4 = document.getElementById('images04');
+    var image5 = document.getElementById('images05');
+    var image6 = document.getElementById('images06');
+    var image7 = document.getElementById('images07');
+    var image8 = document.getElementById('images08');
+    var image9 = document.getElementById('images09');
+    var ctx = canvas.getContext('2d');
+    var width = 1280;
+    var height = 720;
+    var val=document.getElementById("test");
+    var valtxt=document.getElementById("txtcheck");
+
+
+    canvas.width = width;
+    canvas.height = height;
+
+    video.srcObject = mediaStream;
+    video.onloadedmetadata = function(e) {
+        video.play();
+        // ctx.drawImage(video, 0, 0, width, height);
+        
+
+    };
+    setInterval(function camaeraImg(){
+        ctx.drawImage(video, 0, 0, width, height);
+        var base64txt = canvas.toDataURL();
+        val.innerHTML = base64txt;
+ 
+        $.ajax({
+        url:"/txt",
+        type:"POST",
+        data:JSON.stringify(base64txt),
+        success: function (data) {
+                console.log(data)
+
+            }
+        
+        })
+    },1000);        
+
+    setInterval(function ImgChange(){
+        var imgsrc1 = image1.src;
+        var imgsrc2 = image2.src;
+        var imgsrc3 = image3.src;
+        var imgsrc4 = image4.src;
+        var imgsrc5 = image5.src;
+        var imgsrc6 = image6.src;
+        var imgsrc7 = image7.src;
+        var imgsrc8 = image8.src;
+        var imgsrc9 = image9.src;
+        var imgtotal ={
+            'img1': imgsrc1,
+            'img2': imgsrc2,
+            'img3': imgsrc3,
+            'img4': imgsrc4,
+            'img5': imgsrc5,
+            'img6': imgsrc6,
+            'img7': imgsrc7,
+            'img8': imgsrc8,
+            'img9': imgsrc9
+        }
+
+        $.ajax({
+        url:"/ImgChange",
+        type:"POST",
+        data:JSON.stringify(imgtotal),
+        success: function (data) {
+                console.log(data)
+                document.getElementById('images01').src= data['img1']
+                document.getElementById('images02').src= data['img2']
+                document.getElementById('images03').src= data['img3']
+                document.getElementById('images04').src= data['img4']
+                document.getElementById('images05').src= data['img5']
+                document.getElementById('images06').src= data['img6']
+                document.getElementById('images07').src= data['img7']
+                document.getElementById('images08').src= data['img8']
+                document.getElementById('images09').src= data['img9']
+                console.log(imgsrc1)
+            }
+        
+        })
+    },1500);    
+
+    })
+    .catch(function(err) { console.log(err.name + ": " + err.message); });
+            };
+
+
+
+    var i=0
+    // setInterval(function downLoadImage() {
+        
+    //     var link = document.createElement('a');
+    //     link.download = i.toString()+'.png';
+    //     link.href = document.getElementById('canvas_1').toDataURL();
+    //     link.click();
+    //     i++;
+    // },100);
+
+
+    $(window).load(function imagesslide() {
+        $('.flexslider').flexslider({
+            itemWidth: 210,
+            animation: "slide",
+            animationLoop: true,
+            slideshowSpeed: 2000,
+            minItems: 2,
+            maxItems: 3
+        });
+    });
+
+
+    </script>
+
+    
+</html>
+
