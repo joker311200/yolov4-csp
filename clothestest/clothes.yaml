@@ -1,0 +1,8 @@
+train: C:/Users/jack3/Desktop/DataSave/clothes/train.txt
+val: C:/Users/jack3/Desktop/DataSave/clothes/val.txt
+
+# number of classes
+nc: 11 #衣服11身體部位4
+
+# class names
+names: ["overcoat","suit","shrit","short sleeve","vest","long sleeve","hoodie","dress","down Jackets","polo shirt","hooded jacket"]
