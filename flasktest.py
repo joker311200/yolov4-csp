@@ -34,11 +34,11 @@ c = 0
 for file in allFileList:
     imagefolder.append(file)
 
-if not os.path.isdir("./images/flaskcamera/"):
-        os.mkdir("./images/flaskcamera/")
+if not os.path.isdir("./yolov4-csp/images/flaskcamera/"):
+        os.mkdir("./yolov4-csp/images/flaskcamera/")
 else:
-    shutil.rmtree("./images/flaskcamera/")
-    os.mkdir("./images/flaskcamera/")
+    shutil.rmtree("./yolov4-csp/images/flaskcamera/")
+    os.mkdir("./yolov4-csp/images/flaskcamera/")
 
 
 
