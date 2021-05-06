@@ -80,7 +80,14 @@ for item in keyarr:
 os.system('echo "'+writeStr + '" >> '+name + ".name")
 os.chdir(path)
 # 建立 val與train
-os.system('ls -R '+path+'/*.jpg > '+topath+"/"+name+'/all.txt')
+allFileList = os.listdir(path)
+allfilestr = ""
+for nameStr in allFileList:
+    if nameStr[-3:].lower() == "jpg" or nameStr[-3:].lower() == "png":
+        allfilestr = allfilestr + path + "/" +nameStr + "\n"
+# os.system('ls -R '+path+'/*.jpg > '+topath+"/"+name+'/all.txt')
+with open(topath+"/"+name+'/all.txt', 'w') as allFile:
+        allFile.write(allfilestr)
 tandv = float(input('請輸入訓練與測試比例(EX:0.8)：'))
 fp = open(topath+"/"+name+'/all.txt', "r")
 lineArr = []
@@ -104,12 +111,13 @@ for i in range(len(lineArr)):
     else:
         valStr += lineArr[i]# + '\t'
 os.chdir(topath+"/"+name)
+
 trainpath = topath+"/"+name+"/"+"train.txt"
 valpath = topath+"/"+name+"/"+"val.txt"
-os.system('echo "'+trainStr + '" >> train.txt')
-os.system('echo "'+valStr + '" >> val.txt')
-
-
+with open(trainpath, 'w') as trainStrFile:
+        trainStrFile.write(trainStr)
+with open(valpath, 'w') as valStrFile:
+        valStrFile.write(valStr)
 
 os.system('echo "train: '+trainpath+'\n'+'val: '+valpath +
           '\n'+'nc: ' + str(classes)+'\n'+
@@ -124,7 +132,7 @@ print("計算 anchors 值:")
 #       name+'/'+name+'.data -num_of_clusters 9 -width 416 -height 416 -showpause')
 os.system('yes | /home/raiyangsunhua/darknet/darknet detector calc_anchors '+topath+"/" +
       name+'/'+name+'.data -num_of_clusters 9 -width 416 -height 416 -showpause >> anchors.txt')
-time.sleep(1)
+time.sleep(10)
 f = open('anchors.txt', 'r')
 myanchors  = f.read()
 anchorsdata = myanchors.split('anchors =')[1].replace('\n','')
